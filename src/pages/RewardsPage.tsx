@@ -15,6 +15,12 @@ export default function RewardsPage() {
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Please sign in to view rewards</h1>
           <p className="text-gray-600">You need to be logged in to access your rewards.</p>
+          <button 
+            onClick={() => window.location.href = '/login'}
+            className="mt-6 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Sign In
+          </button>
         </div>
       </div>
     );
@@ -52,9 +58,11 @@ export default function RewardsPage() {
           </div>
         </div>
 
-        {activeTab === 'overview' && <RewardsOverview />}
-        {activeTab === 'redeem' && <RedeemPoints />}
-        {activeTab === 'referral' && <ReferralBonus />}
+        <div className="space-y-8">
+          {activeTab === 'overview' && <RewardsOverview />}
+          {activeTab === 'redeem' && <RedeemPoints />}
+          {activeTab === 'referral' && <ReferralBonus />}
+        </div>
       </div>
     </div>
   );
