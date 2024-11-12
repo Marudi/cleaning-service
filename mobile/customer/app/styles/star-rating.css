@@ -1,0 +1,14 @@
+.star {
+  font-size: 24;
+  margin: 2;
+  color: #ccc;
+}
+
+.star.filled {
+  color: #FFD700;
+}
+
+.star.interactive {
+  animation-name: pulse;
+  animation-duration: 0.2s;
+}

@@ -1,0 +1,15 @@
+// Add to existing schema
+model ReferralCode {
+  id            String    @id @default(cuid())
+  code          String    @unique
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  usedBy        User[]    @relation("UsedReferrals")
+  status        String    @default("active") // active, expired, disabled
+  createdAt     DateTime  @default(now())
+  expiresAt     DateTime?
+  usageLimit    Int       @default(10)
+  usageCount    Int       @default(0)
+  pointsEarned  Int       @default(0)
+  trackingData  Json?     // Store additional tracking data
+}

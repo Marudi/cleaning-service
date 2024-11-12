@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="onNavigatingTo">
+  <ActionBar title="My Schedule">
+    <ActionItem ios.position="right" android.position="actionBar">
+      <Label text="&#xf007;" class="fas" tap="onProfileTap" />
+    </ActionItem>
+  </ActionBar>
+
+  <ScrollView>
+    <StackLayout class="p-4">
+      <!-- Today's Schedule -->
+      <Label text="Today's Jobs" class="h1" />
+      
+      <ListView items="{{ schedule }}" class="list-group">
+        <ListView.itemTemplate>
+          <GridLayout rows="auto, auto, auto" columns="*, auto" class="list-group-item p-2">
+            <Label text="{{ time }}" class="font-bold" row="0" col="0" />
+            <Label text="{{ address }}" class="text-muted" row="1" col="0" />
+            <Label text="{{ service }}" class="text-muted" row="2" col="0" />
+            
+            <StackLayout orientation="horizontal" row="0" col="1" rowSpan="3">
+              <Button text="Complete" tap="onJobComplete" class="btn btn-success" visibility="{{ status === 'in-progress' ? 'visible' : 'collapsed' }}" />
+              <Button text="Start" tap="onJobStart" class="btn btn-primary" visibility="{{ status === 'scheduled' ? 'visible' : 'collapsed' }}" />
+              <Button text="Chat" tap="onChatWithCustomer" class="btn btn-outline" />
+            </StackLayout>
+          </GridLayout>
+        </ListView.itemTemplate>
+      </ListView>
+
+      <!-- Weekly Overview -->
+      <Label text="Week Overview" class="h2 m-t-4" />
+      <GridLayout rows="auto" columns="*, *, *, *, *, *, *" class="calendar">
+        <Label text="M" class="text-center" col="0" />
+        <Label text="T" class="text-center" col="1" />
+        <Label text="W" class="text-center" col="2" />
+        <Label text="T" class="text-center" col="3" />
+        <Label text="F" class="text-center" col="4" />
+        <Label text="S" class="text-center" col="5" />
+        <Label text="S" class="text-center" col="6" />
+      </GridLayout>
+
+      <!-- Performance Stats -->
+      <GridLayout columns="*, *" rows="auto" class="stats m-t-4">
+        <StackLayout col="0" class="text-center">
+          <Label text="{{ completedJobs }}" class="h2" />
+          <Label text="Completed" class="text-muted" />
+        </StackLayout>
+        <StackLayout col="1" class="text-center">
+          <Label text="{{ rating }}" class="h2" />
+          <Label text="Rating" class="text-muted" />
+        </StackLayout>
+      </GridLayout>
+    </StackLayout>
+  </ScrollView>
+</Page>

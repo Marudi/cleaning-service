@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Config Panel Toggle Switch */
+.toggle-checkbox:checked {
+  right: 0;
+  border-color: rgb(37, 99, 235);
+}
+
+.toggle-checkbox:checked + .toggle-label {
+  background-color: rgb(37, 99, 235);
+}
+
+.toggle-label {
+  transition-property: background-color;
+  transition-duration: 200ms;
+  transition-timing-function: ease-in;
+}
+
+/* Config Panel Layout */
+.config-panel {
+  @apply fixed inset-y-0 right-0 w-96 bg-white shadow-xl z-50 flex flex-col;
+}
+
+.config-panel-header {
+  @apply p-4 border-b flex items-center justify-between;
+}
+
+.config-panel-content {
+  @apply flex-1 overflow-y-auto;
+}
+
+.config-panel-footer {
+  @apply p-4 border-t bg-gray-50;
+}
+
+/* Config Panel Sections */
+.config-section {
+  @apply p-6 border-b last:border-b-0;
+}
+
+.config-section-title {
+  @apply text-lg font-medium text-gray-900 mb-4;
+}
+
+.config-field {
+  @apply space-y-4;
+}
+
+.config-field-label {
+  @apply block text-sm font-medium text-gray-700;
+}
+
+.config-field-input {
+  @apply mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500;
+}
+
+/* Config Panel Toggle */
+.config-toggle {
+  @apply relative inline-flex items-center cursor-pointer;
+}
+
+.config-toggle-input {
+  @apply sr-only;
+}
+
+.config-toggle-slider {
+  @apply w-11 h-6 bg-gray-200 rounded-full after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all;
+}

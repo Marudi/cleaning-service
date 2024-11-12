@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="onNavigatingTo">
+  <ActionBar title="Imaryza">
+    <ActionItem ios.position="right" android.position="actionBar">
+      <Label text="&#xf007;" class="fas" tap="onProfileTap" />
+    </ActionItem>
+  </ActionBar>
+
+  <ScrollView>
+    <StackLayout class="p-4">
+      <!-- Welcome Section -->
+      <Label text="Welcome back!" class="h1" />
+      
+      <!-- Quick Actions -->
+      <GridLayout columns="*, *" rows="auto" class="m-t-4">
+        <Button text="Book Now" tap="onBookNowTap" class="btn btn-primary" col="0" />
+        <Button text="My Bookings" tap="onMyBookingsTap" class="btn btn-outline" col="1" />
+      </GridLayout>
+
+      <!-- Upcoming Bookings -->
+      <Label text="Upcoming Bookings" class="h2 m-t-4" />
+      <ListView items="{{ bookings }}" class="list-group">
+        <ListView.itemTemplate>
+          <GridLayout columns="*, auto" rows="auto, auto" class="list-group-item">
+            <Label text="{{ service }}" class="font-bold" row="0" col="0" />
+            <Label text="{{ date }}" class="text-muted" row="1" col="0" />
+            <Label text="{{ status }}" class="status" row="0" col="1" rowSpan="2" />
+          </GridLayout>
+        </ListView.itemTemplate>
+      </ListView>
+
+      <!-- Quick Chat -->
+      <Button text="Chat with Cleaner" tap="onChatTap" class="btn btn-outline m-t-4" />
+    </StackLayout>
+  </ScrollView>
+</Page>

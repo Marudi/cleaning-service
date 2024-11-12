@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="onNavigatingTo">
+  <ActionBar title="Rate Service">
+    <NavigationButton text="Back" android.systemIcon="ic_menu_back" />
+  </ActionBar>
+
+  <ScrollView>
+    <StackLayout class="p-4">
+      <!-- Service Details -->
+      <StackLayout class="service-details m-b-4">
+        <Label text="{{ booking.service }}" class="h2" />
+        <Label text="{{ booking.date }}" class="text-muted" />
+        <Label text="{{ booking.cleanerName }}" class="text-muted" />
+      </StackLayout>
+
+      <!-- Rating Stars -->
+      <Label text="How was your service?" class="h3 m-b-2" />
+      <GridLayout columns="auto, auto, auto, auto, auto" class="stars m-b-4">
+        <Label repeat="5" col="{{ $index }}"
+          text="{{ rating >= ($index + 1) ? '★' : '☆' }}"
+          class="star {{ rating >= ($index + 1) ? 'active' : '' }}"
+          tap="onStarTap"
+          index="{{ $index }}" />
+      </GridLayout>
+
+      <!-- Comments -->
+      <Label text="Additional Comments" class="h3 m-b-2" />
+      <TextView hint="Tell us about your experience..."
+        text="{{ comment }}"
+        class="input input-rounded p-2 m-b-4"
+        height="100" />
+
+      <!-- Submit Button -->
+      <Button text="Submit Rating"
+        tap="onSubmitTap"
+        class="btn btn-primary"
+        isEnabled="{{ rating > 0 }}" />
+    </StackLayout>
+  </ScrollView>
+</Page>

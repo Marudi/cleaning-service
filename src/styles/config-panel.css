@@ -1,0 +1,50 @@
+/* Config Panel Styles */
+.config-panel-container {
+  @apply fixed inset-y-0 right-0 w-96 bg-white shadow-xl z-50;
+}
+
+.config-panel-header {
+  @apply p-4 border-b flex items-center justify-between;
+}
+
+.config-panel-tabs {
+  @apply flex border-b;
+}
+
+.config-panel-tab {
+  @apply flex-1 p-3 text-sm font-medium;
+}
+
+.config-panel-tab-active {
+  @apply border-b-2 border-blue-600 text-blue-600;
+}
+
+.config-panel-tab-inactive {
+  @apply text-gray-500 hover:text-gray-700;
+}
+
+.config-panel-content {
+  @apply flex-1 overflow-y-auto;
+  height: calc(100vh - 8rem); /* Subtract header + tabs + footer height */
+}
+
+.config-panel-section {
+  @apply p-6 border-b last:border-b-0;
+}
+
+.config-panel-footer {
+  @apply p-4 border-t bg-white;
+}
+
+/* Toggle Switch */
+.toggle-checkbox:checked {
+  @apply right-0 border-blue-600;
+}
+
+.toggle-checkbox:checked + .toggle-label {
+  @apply bg-blue-600;
+}
+
+.toggle-label {
+  @apply transition-colors duration-200 ease-in;
+}

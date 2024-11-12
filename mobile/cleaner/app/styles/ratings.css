@@ -1,0 +1,30 @@
+.rating-summary {
+  background-color: #f8f9fa;
+  border-radius: 8;
+}
+
+.rating-large {
+  font-size: 48;
+  font-weight: bold;
+  color: #FFD700;
+}
+
+.stars {
+  color: #FFD700;
+  font-size: 24;
+}
+
+.distribution Progress {
+  background-color: #e9ecef;
+  color: #FFD700;
+}
+
+.review-item {
+  border-bottom-width: 1;
+  border-bottom-color: #e9ecef;
+}
+
+.rating {
+  color: #FFD700;
+  font-weight: bold;
+}

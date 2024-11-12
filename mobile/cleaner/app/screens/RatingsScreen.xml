@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="onNavigatingTo">
+  <ActionBar title="My Ratings">
+    <NavigationButton text="Back" android.systemIcon="ic_menu_back" />
+  </ActionBar>
+
+  <ScrollView>
+    <StackLayout class="p-4">
+      <!-- Rating Summary -->
+      <StackLayout class="rating-summary text-center p-4 m-b-4">
+        <Label text="{{ averageRating }}" class="rating-large" />
+        <Label text="★★★★★" class="stars" />
+        <Label text="{{ ratings.length }} ratings" class="text-muted" />
+      </StackLayout>
+
+      <!-- Time Period Filter -->
+      <ListPicker items="{{ ['Last Week', 'Last Month', 'Last 3 Months', 'All Time'] }}"
+        selectedIndex="{{ selectedPeriod }}"
+        class="m-b-4"
+        selectedIndexChange="onPeriodChange" />
+
+      <!-- Rating Distribution -->
+      <GridLayout rows="auto, auto, auto, auto, auto" columns="auto, *, auto" class="distribution m-b-4">
+        <Repeat count="5">
+          <Label text="{{ 5 - $index }}" row="{{ $index }}" col="0" class="text-center" />
+          <Progress value="{{ ratingDistribution[$index].percentage }}" 
+            row="{{ $index }}" col="1" 
+            class="m-2" />
+          <Label text="{{ ratingDistribution[$index].count }}" 
+            row="{{ $index }}" col="2" 
+            class="text-center" />
+        </Repeat>
+      </GridLayout>
+
+      <!-- Recent Reviews -->
+      <Label text="Recent Reviews" class="h2 m-b-2" />
+      <ListView items="{{ ratings }}" class="review-list">
+        <ListView.itemTemplate>
+          <GridLayout rows="auto, auto" columns="*, auto" class="review-item p-2">
+            <Label text="{{ comment }}" textWrap="true" row="0" col="0" />
+            <Label text="{{ rating }} ★" row="0" col="1" class="rating" />
+            <Label text="{{ date }}" row="1" col="0" class="text-muted" />
+          </GridLayout>
+        </ListView.itemTemplate>
+      </ListView>
+    </StackLayout>
+  </ScrollView>
+</Page>

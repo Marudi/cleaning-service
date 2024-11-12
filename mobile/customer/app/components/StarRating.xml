@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<GridLayout xmlns="http://schemas.nativescript.org/tns.xsd"
+  columns="auto, auto, auto, auto, auto">
+  <Repeater items="{{ stars }}">
+    <Repeater.itemsLayout>
+      <StackLayout orientation="horizontal" />
+    </Repeater.itemsLayout>
+    <Repeater.itemTemplate>
+      <Label text="{{ filled ? '★' : '☆' }}"
+        class="star {{ filled ? 'filled' : '' }}"
+        tap="{{ $parent.onStarTap }}"
+        index="{{ index }}" />
+    </Repeater.itemTemplate>
+  </Repeater>
+</GridLayout>
