@@ -1,6 +1,5 @@
+import { API_URL } from '../config/environment';
 import { BookingFormData, ContactFormData, JobApplicationData } from '../types/forms';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
 interface TimeSlot {
   time: string;
@@ -40,74 +39,58 @@ export async function getAvailableSlots(date: string): Promise<TimeSlot[]> {
 }
 
 export async function createBooking(data: BookingFormData): Promise<{ success: boolean; bookingId: string }> {
-  try {
-    const response = await fetch(`${API_URL}/bookings`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      },
-      body: JSON.stringify(data)
-    });
+  const response = await fetch(`${API_URL}/bookings`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    },
+    body: JSON.stringify(data)
+  });
 
-    if (!response.ok) {
-      throw new Error('Failed to create booking');
-    }
-
-    const result = await response.json();
-    return {
-      success: true,
-      bookingId: result.id
-    };
-  } catch (error) {
-    console.error('Failed to create booking:', error);
+  if (!response.ok) {
     throw new Error('Failed to create booking');
   }
+
+  const result = await response.json();
+  return {
+    success: true,
+    bookingId: result.id
+  };
 }
 
 export async function submitContactForm(data: ContactFormData): Promise<{ success: boolean }> {
-  try {
-    const response = await fetch(`${API_URL}/contact`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
+  const response = await fetch(`${API_URL}/contact`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  });
 
-    if (!response.ok) {
-      throw new Error('Failed to submit contact form');
-    }
-
-    return { success: true };
-  } catch (error) {
-    console.error('Failed to submit contact form:', error);
+  if (!response.ok) {
     throw new Error('Failed to submit contact form');
   }
+
+  return { success: true };
 }
 
 export async function submitJobApplication(data: JobApplicationData): Promise<{ success: boolean }> {
-  try {
-    const response = await fetch(`${API_URL}/careers/apply`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
+  const response = await fetch(`${API_URL}/careers/apply`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  });
 
-    if (!response.ok) {
-      throw new Error('Failed to submit job application');
-    }
-
-    return { success: true };
-  } catch (error) {
-    console.error('Failed to submit job application:', error);
+  if (!response.ok) {
     throw new Error('Failed to submit job application');
   }
+
+  return { success: true };
 }
 
-// Add error handling wrapper for fetch calls
 export async function fetchWithErrorHandling(url: string, options?: RequestInit) {
   try {
     const response = await fetch(url, options);
