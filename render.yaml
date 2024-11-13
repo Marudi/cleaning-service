@@ -39,4 +39,4 @@ databases:
   - name: imaryza-db
     databaseName: imaryza
     user: imaryza_admin
-    plan: starter
+    plan: free
