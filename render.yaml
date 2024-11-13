@@ -29,11 +29,15 @@ services:
   - type: web
     name: imaryza-frontend
     env: node
-    buildCommand: npm install && npm run build
-    startCommand: npx serve -s dist
+    buildCommand: |
+      npm install
+      npm run build
+    staticPublishPath: ./dist
     envVars:
       - key: VITE_API_URL
         value: https://imaryza-api.onrender.com/api
+      - key: NODE_VERSION
+        value: 20.11.1
 
 databases:
   - name: imaryza-db
