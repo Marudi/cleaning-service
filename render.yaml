@@ -5,6 +5,8 @@ services:
     buildCommand: |
       apt-get update && apt-get install -y openssl
       npm install
+      npm install vite
+      npm install typescript
       npx prisma generate
       npm run build
     startCommand: |
@@ -32,6 +34,8 @@ services:
     buildCommand: |
       npm install
       npm run build
+      npm install vite
+      npm install typescript
     staticPublishPath: ./dist
     envVars:
       - key: VITE_API_URL
