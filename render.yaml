@@ -5,9 +5,7 @@ services:
     buildCommand: |
       apt-get update && apt-get install -y openssl
       npm install
-      npm install vite
-      npm install typescript
-      npx prisma generate
+      npm install vite && npm install typescript && npx prisma generate
       npm run build
     startCommand: |
       npx prisma migrate deploy
