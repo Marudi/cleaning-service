@@ -1,0 +1,37 @@
+{
+  "nav": {
+    "services": "Services",
+    "about": "About",
+    "pricing": "Pricing",
+    "careers": "Careers",
+    "contact": "Contact",
+    "bookNow": "Book Now"
+  },
+  "hero": {
+    "title": "Transform Your Space with Professional Cleaning Services",
+    "subtitle": "Experience the difference with our premium cleaning services. We bring sparkle to your space and joy to your life with our expert team and eco-friendly solutions.",
+    "cta": {
+      "book": "Book Now",
+      "services": "View Services"
+    },
+    "stats": {
+      "satisfaction": {
+        "title": "100% Satisfaction",
+        "text": "Guaranteed quality service or your money back"
+      },
+      "support": {
+        "title": "24/7 Support",
+        "text": "Always here when you need us"
+      },
+      "eco": {
+        "title": "Eco-Friendly",
+        "text": "Using sustainable cleaning solutions"
+      }
+    }
+  },
+  "language": {
+    "en": "English",
+    "es": "Spanish",
+    "fr": "French"
+  }
+}

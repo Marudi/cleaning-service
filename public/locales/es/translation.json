@@ -1,0 +1,37 @@
+{
+  "nav": {
+    "services": "Servicios",
+    "about": "Nosotros",
+    "pricing": "Precios",
+    "careers": "Carreras",
+    "contact": "Contacto",
+    "bookNow": "Reservar Ahora"
+  },
+  "hero": {
+    "title": "Transforma tu Espacio con Servicios de Limpieza Profesional",
+    "subtitle": "Experimenta la diferencia con nuestros servicios premium de limpieza. Traemos brillo a tu espacio y alegría a tu vida con nuestro equipo experto y soluciones ecológicas.",
+    "cta": {
+      "book": "Reservar Ahora",
+      "services": "Ver Servicios"
+    },
+    "stats": {
+      "satisfaction": {
+        "title": "100% Satisfacción",
+        "text": "Servicio de calidad garantizado o le devolvemos su dinero"
+      },
+      "support": {
+        "title": "Soporte 24/7",
+        "text": "Siempre aquí cuando nos necesites"
+      },
+      "eco": {
+        "title": "Ecológico",
+        "text": "Usando soluciones sostenibles de limpieza"
+      }
+    }
+  },
+  "language": {
+    "en": "Inglés",
+    "es": "Español",
+    "fr": "Francés"
+  }
+}

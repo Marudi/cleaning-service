@@ -1,7 +1,7 @@
 import express from 'express';
-import cors from 'cors';
 import dotenv from 'dotenv';
-import { PrismaClient } from '@prisma/client';
+import { securityMiddleware } from './middleware/security.js';
+import { testConnection } from './config/database.js';
 import authRoutes from './routes/auth.js';
 import bookingRoutes from './routes/bookings.js';
 import serviceRoutes from './routes/services.js';
@@ -12,20 +12,17 @@ import careersRoutes from './routes/careers.js';
 dotenv.config();
 
 const app = express();
-const prisma = new PrismaClient();
 const port = process.env.PORT || 3000;
 
-// Middleware
-app.use(express.json());
-app.use(cors({
-  origin: process.env.CORS_ORIGIN,
-  credentials: true
-}));
+// Apply security middleware
+app.use(securityMiddleware);
 
-// Health check
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok' });
-});
+// Body parsing middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Test database connection
+testConnection().catch(console.error);
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -44,7 +41,12 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 // Start server
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+  console.log(`Server running on port ${port} in ${process.env.NODE_ENV} mode`);
 });

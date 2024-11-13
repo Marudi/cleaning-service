@@ -1,0 +1,37 @@
+{
+  "nav": {
+    "services": "Services",
+    "about": "À Propos",
+    "pricing": "Tarifs",
+    "careers": "Carrières",
+    "contact": "Contact",
+    "bookNow": "Réserver"
+  },
+  "hero": {
+    "title": "Transformez Votre Espace avec des Services de Nettoyage Professionnels",
+    "subtitle": "Découvrez la différence avec nos services de nettoyage premium. Nous apportons de l'éclat à votre espace et de la joie à votre vie avec notre équipe d'experts et nos solutions écologiques.",
+    "cta": {
+      "book": "Réserver",
+      "services": "Voir les Services"
+    },
+    "stats": {
+      "satisfaction": {
+        "title": "100% Satisfaction",
+        "text": "Service de qualité garanti ou remboursé"
+      },
+      "support": {
+        "title": "Support 24/7",
+        "text": "Toujours là quand vous en avez besoin"
+      },
+      "eco": {
+        "title": "Écologique",
+        "text": "Utilisation de solutions de nettoyage durables"
+      }
+    }
+  },
+  "language": {
+    "en": "Anglais",
+    "es": "Espagnol",
+    "fr": "Français"
+  }
+}

@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: imaryza-api
+    env: node
+    buildCommand: |
+      apt-get update && apt-get install -y openssl
+      npm install
+      npx prisma generate
+      npm run build
+    startCommand: |
+      npx prisma migrate deploy
+      node server/index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: imaryza-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN
+        value: https://imaryza.onrender.com
+      - key: PRISMA_CLI_BINARY_TARGETS
+        value: debian-openssl-1.1.x
+
+  - type: web
+    name: imaryza-frontend
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npx serve -s dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://imaryza-api.onrender.com/api
+
+databases:
+  - name: imaryza-db
+    databaseName: imaryza
+    user: imaryza_admin
+    plan: starter

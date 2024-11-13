@@ -1,15 +1,122 @@
-// Add to existing schema
-model ReferralCode {
-  id            String    @id @default(cuid())
-  code          String    @unique
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  rewards   Rewards?
+}
+
+model Rewards {
+  id             String          @id @default(cuid())
+  userId         String          @unique
+  points         Int            @default(0)
+  pendingPoints  Int            @default(0)
+  redeemedPoints Int            @default(0)
+  tier           String         @default("BRONZE")
+  multiplier     Float          @default(1.0)
+  user           User           @relation(fields: [userId], references: [id])
+  history        RewardHistory[]
+}
+
+model RewardHistory {
+  id          String   @id @default(cuid())
+  userId      String
+  type        String
+  amount      Int
+  description String
+  date        DateTime @default(now())
+  status      String
+  rewards     Rewards  @relation(fields: [userId], references: [userId])
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  price       Float
+  duration    Int
+  category    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  bookings    Booking[]
+}
+
+model Booking {
+  id            String   @id @default(cuid())
   userId        String
-  user          User      @relation(fields: [userId], references: [id])
-  usedBy        User[]    @relation("UsedReferrals")
-  status        String    @default("active") // active, expired, disabled
-  createdAt     DateTime  @default(now())
-  expiresAt     DateTime?
-  usageLimit    Int       @default(10)
-  usageCount    Int       @default(0)
-  pointsEarned  Int       @default(0)
-  trackingData  Json?     // Store additional tracking data
+  serviceId     String
+  date          DateTime
+  time          String
+  status        String   @default("scheduled")
+  customerName  String
+  customerEmail String
+  customerPhone String
+  address       String
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  service       Service  @relation(fields: [serviceId], references: [id])
+}
+
+model Staff {
+  id             String     @id @default(cuid())
+  name           String
+  email          String     @unique
+  phone          String
+  role           String
+  status         String     @default("active")
+  schedule       Schedule[]
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+}
+
+model Schedule {
+  id        String   @id @default(cuid())
+  staffId   String
+  date      DateTime
+  startTime DateTime
+  endTime   DateTime
+  staff     Staff    @relation(fields: [staffId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model JobApplication {
+  id          String   @id @default(cuid())
+  firstName   String
+  lastName    String
+  email       String
+  phone       String
+  position    String
+  status      String   @default("new")
+  resumeUrl   String?
+  coverLetter String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Inventory {
+  id           String   @id @default(cuid())
+  name         String
+  description  String?
+  quantity     Int
+  unit         String
+  category     String
+  reorderPoint Int
+  price        Float
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
