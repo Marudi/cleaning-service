@@ -8,9 +8,12 @@ import serviceRoutes from './routes/services.js';
 import staffRoutes from './routes/staff.js';
 import inventoryRoutes from './routes/inventory.js';
 import careersRoutes from './routes/careers.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -24,13 +27,23 @@ app.use(express.urlencoded({ extended: true }));
 // Test database connection
 testConnection().catch(console.error);
 
-// Routes
+// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/staff', staffRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/careers', careersRoutes);
+
+// Serve static files in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../dist')));
+  
+  // Handle SPA routing
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../dist/index.html'));
+  });
+}
 
 // Error handling
 app.use((err, req, res, next) => {
@@ -47,6 +60,6 @@ app.get('/health', (req, res) => {
 });
 
 // Start server
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`Server running on port ${port} in ${process.env.NODE_ENV} mode`);
 });
