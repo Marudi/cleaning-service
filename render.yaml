@@ -6,7 +6,7 @@ services:
       apt-get update && apt-get install -y openssl
       npm install
       npm install vite && npm install typescript && npx prisma generate
-      npm run build
+      npm run build --production=false
     startCommand: |
       npx prisma migrate deploy
       node server/index.js
@@ -31,7 +31,7 @@ services:
     env: node
     buildCommand: |
       npm install
-      npm run build
+      npm run build --production=false
       npm install vite
       npm install typescript
     staticPublishPath: ./dist
