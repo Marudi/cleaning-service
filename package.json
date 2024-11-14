@@ -15,7 +15,9 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
     "postinstall": "prisma generate",
-    "start": "node server/index.js"
+    "start": "node server/index.js",
+    "build:server": "tsc -p tsconfig.server.json",
+    "build:all": "npm run build && npm run build:server"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
