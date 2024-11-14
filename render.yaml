@@ -6,10 +6,10 @@ services:
       apt-get update && apt-get install -y openssl
       npm ci
       npx prisma generate
-      npm run build
+      npm run build:all
     startCommand: |
       npx prisma migrate deploy
-      node server/index.js
+      node dist/server/index.js
     envVars:
       - key: NODE_ENV
         value: production
