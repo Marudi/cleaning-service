@@ -8,6 +8,8 @@
   },
   "scripts": {
     "dev": "vite",
+    "start": "vite",
+    "watch": "npx tailwindcss -i input.css -o ./css/style.css --watch",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
