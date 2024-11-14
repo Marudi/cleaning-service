@@ -5,6 +5,7 @@ services:
     buildCommand: |
       apt-get update && apt-get install -y openssl
       npm ci
+      npm install -D tailwindcss postcss autoprefixer vite
       npx prisma generate
       npm run build:all
     startCommand: |
@@ -31,6 +32,7 @@ services:
     env: node
     buildCommand: |
       npm ci
+      npm install -D tailwindcss postcss autoprefixer vite
       npm run build
     staticPublishPath: ./dist
     routes:
