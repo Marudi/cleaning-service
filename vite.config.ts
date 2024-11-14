@@ -1,14 +1,12 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   build: {
-    // Generate source maps for production
     sourcemap: true,
-    // Optimize chunk size
-    chunkSizeWarningLimit: 1000,
+    outDir: 'dist',
+    assetsDir: 'assets',
     rollupOptions: {
       output: {
         manualChunks: {
@@ -19,8 +17,14 @@ export default defineConfig({
     }
   },
   server: {
-    // Ensure proper host for development
+    port: 5173,
     host: true,
-    port: 5173
+    proxy: {
+      '/api': {
+        target: process.env.VITE_API_URL || 'http://localhost:3000',
+        changeOrigin: true,
+        secure: false
+      }
+    }
   }
 });
