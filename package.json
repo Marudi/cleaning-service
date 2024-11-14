@@ -13,12 +13,12 @@
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
     "@prisma/client": "^5.22.0",
-    "@vitejs/plugin-react": "^4.3.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "date-fns": "^3.3.1",
@@ -38,7 +38,6 @@
     "react-router-dom": "^6.22.3",
     "recharts": "^2.12.2",
     "zod": "^3.22.4",
-    "vite": "^5.1.4",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
