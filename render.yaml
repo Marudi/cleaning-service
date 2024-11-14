@@ -4,9 +4,9 @@ services:
     env: node
     buildCommand: |
       apt-get update && apt-get install -y openssl
-      npm install
+      npm install --production=false
       npm install vite && npm install typescript && npx prisma generate
-      npm run build --production=false
+      npm run build
     startCommand: |
       npx prisma migrate deploy
       node server/index.js
@@ -30,8 +30,8 @@ services:
     name: imaryza-frontend
     env: node
     buildCommand: |
-      npm install
-      npm run build --production=false
+      npm install --production=false
+      npm run build
       npm install vite
       npm install typescript
     staticPublishPath: ./dist
