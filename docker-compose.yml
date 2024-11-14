@@ -8,7 +8,7 @@ services:
     ports:
       - "5173:5173"
     environment:
-      - VITE_API_URL=http://localhost:3000/api
+      - VITE_API_URL=https://imaryza-api.onrender.com:3000/api
     depends_on:
       - backend
 
@@ -23,7 +23,7 @@ services:
       - JWT_SECRET=your-super-secret-key-change-this-in-production
       - PORT=3000
       - NODE_ENV=development
-      - CORS_ORIGIN=http://localhost:5173
+      - CORS_ORIGIN=https://imaryza-api.onrender.com:5173
     depends_on:
       db:
         condition: service_healthy
