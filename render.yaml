@@ -46,5 +46,5 @@ services:
 databases:
   - name: imaryza-db
     databaseName: imaryza
-    plan: starter
+    plan: free
     ipAllowList: []
