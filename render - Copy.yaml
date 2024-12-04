@@ -4,7 +4,9 @@ services:
     env: node
     region: oregon
     plan: starter
-    buildCommand: npm ci && npm run build
+    buildCommand: |
+      npm ci
+      npm run build
     startCommand: npm start
     healthCheckPath: /health
     envVars:
@@ -18,11 +20,8 @@ services:
         generateValue: true
       - key: CORS_ORIGIN
         value: https://imaryza.onrender.com
-      - key: REDIS_URL
-        fromService:
-          name: imaryza-redis
-          type: redis
-          property: connectionString
+      - key: PORT
+        value: 3000
     autoDeploy: true
 
   - type: web
@@ -37,11 +36,6 @@ services:
     envVars:
       - key: VITE_API_URL
         value: https://imaryza-api.onrender.com/api
-
-  - type: redis
-    name: imaryza-redis
-    ipAllowList: []
-    plan: starter
 
 databases:
   - name: imaryza-db

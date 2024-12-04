@@ -9,13 +9,12 @@ services:
       - "80:80"
       - "443:443"
     environment:
-      - VITE_API_URL=${VITE_API_URL}
+      - VITE_API_URL=http://api:3000/api
     depends_on:
       - api
     volumes:
-      - ./ssl:/etc/nginx/ssl:ro
-      - ./nginx/conf.d:/etc/nginx/conf.d:ro
-      - frontend_static:/usr/share/nginx/html
+      - ./ssl:/etc/nginx/ssl
+      - ./nginx/conf.d:/etc/nginx/conf.d
     networks:
       - imaryza_network
 
@@ -26,8 +25,8 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
-      - REDIS_URL=${REDIS_URL}
+      - DATABASE_URL=postgresql://postgres:${DB_PASSWORD}@db:5432/imaryza
+      - REDIS_URL=redis://redis:6379
       - JWT_SECRET=${JWT_SECRET}
       - NODE_ENV=production
       - CORS_ORIGIN=${CORS_ORIGIN}
@@ -36,9 +35,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    volumes:
-      - api_logs:/app/logs
-      - api_uploads:/app/uploads
     networks:
       - imaryza_network
 
@@ -47,13 +43,11 @@ services:
       context: .
       dockerfile: Dockerfile.worker
     environment:
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
-      - REDIS_URL=${REDIS_URL}
+      - DATABASE_URL=postgresql://postgres:${DB_PASSWORD}@db:5432/imaryza
+      - REDIS_URL=redis://redis:6379
     depends_on:
       - db
       - redis
-    volumes:
-      - worker_logs:/app/logs
     networks:
       - imaryza_network
 
@@ -62,14 +56,13 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=imaryza
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
     volumes:
-      - volume_name:/var/lib/postgresql/data
-      - postgres_backup:/backup
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -82,7 +75,6 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
-      - redis_backup:/backup
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -92,22 +84,8 @@ services:
       - imaryza_network
 
 volumes:
-  frontend_static:
-    driver: local
-  api_logs:
-    driver: local
-  api_uploads:
-    driver: local
-  worker_logs:
-    driver: local
-  volume_name:
-    driver: local
-  postgres_backup:
-    driver: local
+  postgres_data:
   redis_data:
-    driver: local
-  redis_backup:
-    driver: local
 
 networks:
   imaryza_network:

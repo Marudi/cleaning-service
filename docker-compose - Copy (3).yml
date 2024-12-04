@@ -26,7 +26,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      - DATABASE_URL=postgresql://postgres:${DB_PASSWORD}@db:5432/imaryza
       - REDIS_URL=${REDIS_URL}
       - JWT_SECRET=${JWT_SECRET}
       - NODE_ENV=production
@@ -47,7 +47,7 @@ services:
       context: .
       dockerfile: Dockerfile.worker
     environment:
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      - DATABASE_URL=postgresql://postgres:${DB_PASSWORD}@db:5432/imaryza
       - REDIS_URL=${REDIS_URL}
     depends_on:
       - db
@@ -62,14 +62,14 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=imaryza
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
     volumes:
-      - volume_name:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
       - postgres_backup:/backup
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -100,7 +100,7 @@ volumes:
     driver: local
   worker_logs:
     driver: local
-  volume_name:
+  postgres_data:
     driver: local
   postgres_backup:
     driver: local

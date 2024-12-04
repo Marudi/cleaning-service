@@ -7,7 +7,7 @@ echo "Starting deployment process..."
 
 # Build the frontend
 echo "Building frontend..."
-npm run build --production=false
+npm run build
 
 # Generate Prisma client
 echo "Generating Prisma client..."
