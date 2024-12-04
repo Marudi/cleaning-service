@@ -1,39 +1,87 @@
+import { sendEmail } from '../utils/email.js';
+import { sendSMS } from '../utils/sms.js';
+
 export async function processNotifications(prisma, redis) {
-  const processInterval = 30000; // 30 seconds
+  const subscriber = redis.duplicate();
+  await subscriber.connect();
 
-  async function processNotificationQueue() {
+  await subscriber.subscribe('notifications', async (message) => {
     try {
-      const subscriber = redis.duplicate();
-      await subscriber.connect();
-
-      await subscriber.subscribe('notifications', async (message) => {
-        const notification = JSON.parse(message);
-        
-        switch (notification.type) {
-          case 'booking_reminder':
-            await sendBookingReminder(notification.booking);
-            break;
-          case 'rewards_credited':
-            await sendRewardsNotification(notification.userId, notification.points);
-            break;
-          default:
-            console.log('Unknown notification type:', notification.type);
-        }
-      });
+      const notification = JSON.parse(message);
+      
+      switch (notification.type) {
+        case 'booking_reminder':
+          await handleBookingReminder(notification, prisma);
+          break;
+        case 'rewards_credited':
+          await handleRewardsNotification(notification, prisma);
+          break;
+        default:
+          console.log('Unknown notification type:', notification.type);
+      }
     } catch (error) {
-      console.error('Error processing notifications:', error);
+      console.error('Error processing notification:', error);
     }
-  }
+  });
+}
 
-  async function sendBookingReminder(booking) {
-    // Implement email/SMS notification logic
-    console.log('Sending booking reminder:', booking.id);
-  }
+async function handleBookingReminder(notification, prisma) {
+  const booking = await prisma.booking.findUnique({
+    where: { id: notification.data.bookingId },
+    include: {
+      user: {
+        select: {
+          email: true,
+          name: true
+        }
+      },
+      service: true
+    }
+  });
 
-  async function sendRewardsNotification(userId, points) {
-    // Implement rewards notification logic
-    console.log('Sending rewards notification:', userId, points);
-  }
+  if (!booking) return;
 
-  return processNotificationQueue();
+  await Promise.all([
+    sendEmail({
+      to: booking.user.email,
+      template: 'booking-reminder',
+      data: {
+        name: booking.user.name,
+        service: booking.service.name,
+        date: notification.data.date,
+        time: notification.data.time
+      }
+    }),
+    sendSMS({
+      to: booking.customerPhone,
+      template: 'booking-reminder',
+      data: {
+        service: booking.service.name,
+        date: notification.data.date,
+        time: notification.data.time
+      }
+    })
+  ]);
+}
+
+async function handleRewardsNotification(notification, prisma) {
+  await Promise.all([
+    sendEmail({
+      to: notification.userEmail,
+      template: 'rewards-credited',
+      data: {
+        name: notification.userName,
+        points: notification.points
+      }
+    }),
+    prisma.notification.create({
+      data: {
+        userId: notification.userId,
+        type: 'REWARDS',
+        title: 'Points Credited',
+        message: `${notification.points} points have been added to your account!`,
+        status: 'UNREAD'
+      }
+    })
+  ]);
 }

@@ -1,6 +1,10 @@
-export async function processBookings(prisma, redis) {
-  const processInterval = 60000; // 1 minute
+import { formatISO, addHours } from 'date-fns';
+import { createNotification } from '../utils/notifications.js';
 
+const REMINDER_HOURS = 24;
+const PROCESS_INTERVAL = 60000; // 1 minute
+
+export async function processBookings(prisma, redis) {
   async function processUpcomingBookings() {
     try {
       const upcomingBookings = await prisma.booking.findMany({
@@ -8,25 +12,37 @@ export async function processBookings(prisma, redis) {
           status: 'scheduled',
           date: {
             gte: new Date(),
-            lte: new Date(Date.now() + 24 * 60 * 60 * 1000) // Next 24 hours
+            lte: addHours(new Date(), REMINDER_HOURS)
           }
         },
         include: {
-          service: true
+          service: true,
+          user: {
+            select: {
+              email: true,
+              name: true
+            }
+          }
         }
       });
 
       for (const booking of upcomingBookings) {
-        await redis.publish('notifications', JSON.stringify({
+        await createNotification({
           type: 'booking_reminder',
-          booking
-        }));
+          userId: booking.userId,
+          data: {
+            bookingId: booking.id,
+            serviceName: booking.service.name,
+            date: formatISO(booking.date),
+            time: booking.time
+          }
+        }, redis);
       }
     } catch (error) {
       console.error('Error processing bookings:', error);
     }
   }
 
-  setInterval(processUpcomingBookings, processInterval);
+  setInterval(processUpcomingBookings, PROCESS_INTERVAL);
   return processUpcomingBookings();
 }

@@ -1,6 +1,6 @@
-export async function processRewards(prisma, redis) {
-  const processInterval = 300000; // 5 minutes
+const PROCESS_INTERVAL = 300000; // 5 minutes
 
+export async function processRewards(prisma, redis) {
   async function processPendingRewards() {
     try {
       const pendingRewards = await prisma.rewards.findMany({
@@ -8,31 +8,43 @@ export async function processRewards(prisma, redis) {
           pendingPoints: {
             gt: 0
           }
+        },
+        include: {
+          user: {
+            select: {
+              email: true,
+              name: true
+            }
+          }
         }
       });
 
       for (const reward of pendingRewards) {
-        await prisma.rewards.update({
-          where: { id: reward.id },
-          data: {
-            points: { increment: reward.pendingPoints },
-            pendingPoints: 0,
-            history: {
-              create: {
-                userId: reward.userId,
-                type: 'EARNED',
-                amount: reward.pendingPoints,
-                description: 'Points credited',
-                status: 'COMPLETED'
-              }
+        await prisma.$transaction([
+          prisma.rewards.update({
+            where: { id: reward.id },
+            data: {
+              points: { increment: reward.pendingPoints },
+              pendingPoints: 0
             }
-          }
-        });
+          }),
+          prisma.rewardHistory.create({
+            data: {
+              userId: reward.userId,
+              type: 'EARNED',
+              amount: reward.pendingPoints,
+              description: 'Points credited',
+              status: 'COMPLETED'
+            }
+          })
+        ]);
 
         await redis.publish('notifications', JSON.stringify({
           type: 'rewards_credited',
           userId: reward.userId,
-          points: reward.pendingPoints
+          points: reward.pendingPoints,
+          userName: reward.user.name,
+          userEmail: reward.user.email
         }));
       }
     } catch (error) {
@@ -40,6 +52,6 @@ export async function processRewards(prisma, redis) {
     }
   }
 
-  setInterval(processPendingRewards, processInterval);
+  setInterval(processPendingRewards, PROCESS_INTERVAL);
   return processPendingRewards();
 }
